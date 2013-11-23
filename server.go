@@ -92,6 +92,7 @@ func render(res http.ResponseWriter, data interface{}) string {
 
 func asJson(res http.ResponseWriter, data []byte) string {
   res.Header().Set("Content-Type", "application/json")
+  res.Header().Set("Access-Control-Allow-Origin", "*")
   return string(data[:])
 }
 
