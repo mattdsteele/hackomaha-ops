@@ -6,6 +6,7 @@ import (
   "github.com/codegangsta/martini"
   "encoding/json"
   "strconv"
+  "net/http"
 )
 
 func main() {
@@ -57,31 +58,35 @@ func main() {
     },
   }
 
-  m.Get("/schools", func() string {
-    llSchoolsJ, err := json.Marshal(schools)
-    if err != nil { panic(err) }
-    return string(llSchoolsJ[:])
+  m.Get("/schools", func(res http.ResponseWriter) string {
+    return render(res, schools)
   })
 
-  m.Get("/districts", func() string {
-    district, err := json.Marshal(allDistricts)
-    if err != nil { panic(err) }
-    return string(district[:])
+  m.Get("/districts", func(res http.ResponseWriter) string {
+    return render(res, allDistricts)
   })
 
-  m.Get("/schools/:id", func(params martini.Params) string {
+  m.Get("/schools/:id", func(res http.ResponseWriter, params martini.Params) string {
     school := schoolFind(schools, params["id"])
-    llSchoolJ, err := json.Marshal(school)
-    if err != nil { panic(err) }
-    return string(llSchoolJ[:])
+    return render(res, school)
   })
 
-  m.Get("/schools/:id/:year", func(params martini.Params) string {
+  m.Get("/schools/:id/:year", func(res http.ResponseWriter, params martini.Params) string {
     return "WOOOOO"
   })
+
   m.Run()
 }
 
+func render(res http.ResponseWriter, data interface{}) string {
+    thing, err := json.Marshal(data)
+    if err != nil { panic(err) }
+  return asJson(res, thing)
+}
+func asJson(res http.ResponseWriter, data []byte) string {
+  res.Header().Set("Content-Type", "application/json")
+  return string(data[:])
+}
 
 func schoolFind(schools []School, id string) School {
   schoolId, err := strconv.ParseInt(id, 0, 64)
