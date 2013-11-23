@@ -34,7 +34,13 @@ func main() {
       },
     },
   }
-  schoolTwo := School{Id: 2, Name: "Millard South High School", CountyId: 1, DistrictId: 1}
+  schoolTwo := School{
+    Id: 2,
+    Name: "Millard South High School",
+    CountyId: 1,
+    DistrictId: 1,
+    ClassStats: []ClassStat{},
+  }
   schools := []School{schoolOne, schoolTwo}
 
   entry2012 := DistrictYear{
@@ -79,10 +85,11 @@ func main() {
 }
 
 func render(res http.ResponseWriter, data interface{}) string {
-    thing, err := json.Marshal(data)
-    if err != nil { panic(err) }
+  thing, err := json.Marshal(data)
+  if err != nil { panic(err) }
   return asJson(res, thing)
 }
+
 func asJson(res http.ResponseWriter, data []byte) string {
   res.Header().Set("Content-Type", "application/json")
   return string(data[:])
