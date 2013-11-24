@@ -102,8 +102,8 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 
 	 		 $scope.createStackedBar = function(data){
 	 			 var margin = {top: 20, right: 40, bottom: 30, left: 40},
-	 			     width = 760 - margin.left - margin.right,
-	 			     height = 500 - margin.top - margin.bottom;
+	 			     width = 1024 - margin.left - margin.right,
+	 			     height = 550 - margin.top - margin.bottom;
 
 	 			 var x = d3.scale.ordinal()
 	 			     .rangeRoundBands([0, width], .1);
