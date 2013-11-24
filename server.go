@@ -88,7 +88,7 @@ func main() {
     	}] = schoolStat
     }
     
-    //TODO Use years from db?
+    //TODO Use years from db? - if so make sure they're in the right order
     for _, year := range years {
 
       schoolsInYear := []SchoolYear{}
@@ -147,7 +147,10 @@ func main() {
     }
 
     var enrollmentData = []EnrollmentByYear{}
-    for year, enrollment := range yearsToEnrollments{
+    //Using hard coded years to make sure they're returned in order:
+    for _, year := range years {
+
+	enrollment := yearsToEnrollments[year]	
 
       //calculate Students field
       //Could pull from SchoolStat, but will want to change
