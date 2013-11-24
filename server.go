@@ -89,8 +89,8 @@ func main() {
   })
   
   type YearAndSchool struct {
-  	SchoolId	int64
-  	Years 		string
+          SchoolId        int64
+          Years                 string
   }
 
   //TODO need to also return stats by year for each school in the district
@@ -185,11 +185,7 @@ func main() {
 
   //TODO Possible clean-up opportunities here, but it's looking pretty decent
   m.Get("/school/:id", func(res http.ResponseWriter, params martini.Params) string {
-    var school = School{
-      //FIXME hardcoded data
-      Latitude : 41.31027811,
-      Longitude : -96.146874,
-    }
+    var school = School{}
     schoolId := params["id"]
     db.Where("id = ?", schoolId).First(&school)
     
@@ -207,32 +203,26 @@ func main() {
     }
     
     var schoolStats = []SchoolStat{}
-    db.Where("school_id = ? and teacher_size is not null", params["id"]).Find(&schoolStats)
+    db.Where("school_id = ?", params["id"]).Find(&schoolStats)
     
     var yearsToTotalStats = map[string]SchoolStat{}
     for _, row := range schoolStats {
-    	yearsToTotalStats[row.Years] = row
+            yearsToTotalStats[row.Years] = row
     }
 
     var enrollmentData = []EnrollmentByYear{}
     //Using hard coded years to make sure they're returned in order:
     for _, year := range years {
-
-      enrollment := yearsToEnrollments[year]	
-
-      //calculate Students field
-      //Could pull from SchoolStat, but will want to change
-      //query above and deal properly with teacher_size being null
-      var classSize int64 = 0
-      for _, i := range enrollment { classSize += i.EnrollmentSize }
-
-	  teachersAsFloat, _ := strconv.ParseFloat(yearsToTotalStats[year].TeacherSize, 64)
-      enrollmentData = append(enrollmentData, EnrollmentByYear{
-        Year: year,
-        GradeEnrollment: enrollment,
-        Students: classSize,
-        Teachers: int64(teachersAsFloat),
-      })
+        studentCount := yearsToTotalStats[year].EnrollmentSize
+        if studentCount > 0 {
+        	teachersAsFloat, _ := strconv.ParseFloat(yearsToTotalStats[year].TeacherSize, 64)
+        	enrollmentData = append(enrollmentData, EnrollmentByYear{
+        		Year: year,
+        		GradeEnrollment: yearsToEnrollments[year],
+        		Students: yearsToTotalStats[year].EnrollmentSize,
+        		Teachers: int64(teachersAsFloat),
+      		})
+      }
     }
 
     //put it all together
