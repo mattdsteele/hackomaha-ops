@@ -25,8 +25,8 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 	//labels will be school name
 	$scope.historicalBarChart = [];
 	$scope.addBarChart= function(){
-		nv.addGraph(function() {  
-			
+		nv.addGraph(function() {
+
 		  var chart = nv.models.discreteBarChart()
 		      .x(function(d) { return d.label })
 		      .y(function(d) { return d.value })
@@ -39,13 +39,29 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 							.axisLabel("Schools");
 					chart.yAxis
 							.axisLabel("# of Students")
-							
+
 			chart.margin({left: 100,bottom: 100}) //hack https://github.com/novus/nvd3/issues/17
 
 		  d3.select('#barchart svg')
 		      .datum($scope.historicalBarChart)
 		      .call(chart);
 		  nv.utils.windowResize(chart.update);
+
+
+        var btnYear = $('.navbar-nav button');
+
+        $(btnYear).on('click', function(evt){
+          // console.log(evt.target);
+          // console.log(evt.target.dataset.year);
+          // console.log(maps, OPS);
+
+          OPS.curYear = evt.target.dataset.year;
+          if(OPS.curYear > 0){
+            OPS.curYear = OPS.curYear -1;
+          }
+          maps.loadCollectionData(OPS.curType, OPS.curYear);
+        });
+
 		  return chart;
 		});
 	}
@@ -76,12 +92,12 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 		    .attr("x", function(d) { return x(d) - 3; })
 		    .attr("y", barHeight / 2)
 		    .attr("dy", ".35em")
-		    .text(function(d) { return d; });				
+		    .text(function(d) { return d; });
 	}
-	
-	
 
-	
+
+
+
   $scope.drawEnrollmentChart = function(){
 		OpsApi.getSchool($scope.schoolId).success(function(data){
 			$scope.schoolEnrollment = [];
@@ -93,8 +109,8 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 			$scope.addEnrollmentChart($scope.schoolEnrollment);
 		});
 	}
-	
-	
+
+
   $scope.schoolId = 2;
   OpsApi.getSchool($scope.schoolId).success(function (data) {
 		$scope.historicalBarChart = [{key: "Cumulative Return", values:[]}]
@@ -111,5 +127,5 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 		}
 		 	$scope.addBarChart();
      });
-	
+
 });

@@ -2,11 +2,14 @@ var api_url = "/";
 
 var OPS = {
   curData: [],
+  curType: null,
+  curYear: 0,
 
   init: function(){
 
     $.getJSON(api_url + "districts", function(json) {
       OPS.curData = json;
+      OPS.curType = "districts";
       maps.init();
     });
 
@@ -38,7 +41,7 @@ var maps = {
           new MQA.MapCornerPlacement(MQA.MapCorner.TOP_LEFT, new MQA.Size(5,5))
         );
 
-        maps.loadCollectionData('districts','');
+        maps.loadCollectionData('districts', 0);
 
 
 
@@ -46,18 +49,18 @@ var maps = {
     });
   },
 
-  loadCollectionData: function(type, id){
+  loadCollectionData: function(type, year){
     // var newDataURL = api_url + type + id;
 
     // console.log(newDataURL);
 
       switch(type){
         case 'districts':
-          maps.addDistrictCollection(OPS.curData, 0);
+          maps.addDistrictCollection(OPS.curData, year);
           // console.log('districts loading...');
           break;
         case 'schools':
-          maps.addSchoolsCollection(OPS.curData);
+          maps.addSchoolsCollection(OPS.curData, year);
           break;
       }
 
@@ -65,11 +68,14 @@ var maps = {
   },
 
   addDistrictCollection: function(data, year){
+    map.removeAllShapes();
+
     var collection = new MQA.ShapeCollection();
     collection.maxZoomLevel = 7;
     var d = data[year]['Districts'];
 
-    // console.log(d);
+    console.log(year, d);
+
     for(i=0; i < d.length; i++){
       var mapCircle = new MQA.CircleOverlay();
 
@@ -97,10 +103,13 @@ var maps = {
   },
 
   addSchoolsCollection: function(data, year){
+    map.removeAllShapes();
+
     var collection = new MQA.ShapeCollection();
     collection.maxZoomLevel = 7;
 
     var s = data[year]['Schools'];
+    console.log(year, s);
 
     for(i=0; i < s.length; i++){
       var mapCircle = new MQA.CircleOverlay();
@@ -140,9 +149,10 @@ function loadCollection(evt){
 
   $.getJSON(district_url, function(json) {
     OPS.curData = json;
+    OPS.curType = "schools";
     // console.log(OPS.curData);
     map.removeAllShapes();
-    maps.addSchoolsCollection(OPS.curData, 0);
+    maps.addSchoolsCollection(OPS.curData, OPS.curYear);
   });
 }
 
@@ -153,5 +163,8 @@ function showGraphs(evt){
 (function($){
 
   OPS.init();
+
+  window.maps = maps;
+  window.OPS = OPS;
 
 })(jQuery);
