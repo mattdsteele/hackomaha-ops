@@ -140,7 +140,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 
 	 		   data.sort(function(a, b) { return a.Year - b.Year ; });
 
-	 		   x.domain(data.map(function(d) { return d.Year; }));
+	 		   x.domain(data.map(function(d) { return d.Year.substr(0,4) + "-" + d.Year.substr(4,7); }));
 	 		   y.domain([0, d3.max(data, function(d) { return d.total; })]);
 
 	 		   svg.append("g")
