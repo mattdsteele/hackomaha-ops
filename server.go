@@ -1,208 +1,80 @@
 package main
 
 import (
-  "database/sql"
-  _ "github.com/go-sql-driver/mysql"
+  //"database/sql"
+  //_ "github.com/go-sql-driver/mysql"
   "github.com/codegangsta/martini"
   "encoding/json"
   "net/http"
-  "fmt"
   "os"
+  "github.com/jinzhu/gorm"
+  _ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
   m := martini.Classic()
 
   dbPassword := os.Getenv("OOPS_DB_PASS")
-  db, err := sql.Open("mysql", "oops:" + dbPassword + "@tcp(15.126.247.23:3306)/oops")
+  db, err := gorm.Open("mysql", "oops:" + dbPassword + "@tcp(15.126.247.23:3306)/oops")
   if err != nil { panic(err) }
-  defer db.Close()
-
-  //just a few test queries
-  rows, err := db.Query("SELECT id,name FROM schools")
-  if err != nil { panic(err) }
-  columns, err := rows.Columns()
-  if err != nil { panic(err) }
-  fmt.Printf("%v", columns)
+  //defer db.Close() //TODO what should this be?
+  
+  //db.SetPool(10)
+  
+  db.LogMode(true)
 
   m.Map(db)
-
-  //All fake data
-  schoolOne := School{
-    Id: 1,
-    Name: "Millard North High School",
-    CountyId: 1,
-    DistrictId: 1,
-    Latitude: 41.31027811,
-    Longitude: -96.146874,
-  }
-  schoolTwo := School{
-    Id: 2,
-    Name: "Millard South High School",
-    CountyId: 1,
-    DistrictId: 1,
-    Latitude: 41.31027811,
-    Longitude: -96.146874,
-  }
-  schools := []School{schoolOne, schoolTwo}
-
-  entry2012 := DistrictYear{
-    EnrollmentSize: 15,
-    District: District{
-      Id: 15,
-      Name: "OPS",
-      Latitude: 41.31027811,
-      Longitude: -96.146874,
-    },
-  }
-
-  schoolYearOne := SchoolYear{
-    EnrollmentSize: 55,
-    School: schoolOne,
-  }
-  district66 := SchoolsByYear{
-    Year: "2012-2013",
-    Schools: []SchoolYear{
-      schoolYearOne,
-    },
-  }
-
-  allDistricts := []DistrictsByYear{
-    DistrictsByYear{
-      Year: "2012-2013",
-      Districts: []DistrictYear{entry2012},
-    },
-    DistrictsByYear{
-      Year: "2011-2012",
-      Districts: []DistrictYear{entry2012},
-    },
-  }
-
-
-  millardNorth := SchoolWithEnrollment{
-    School: schoolOne,
-    EnrollmentByYear: []EnrollmentByYear{
-      EnrollmentByYear{
-        Year: "2012-2013",
-        Teachers: 55,
-        Students: 3000,
-        GradeEnrollment: []GradeEnrollment{
-          GradeEnrollment{
-            Grade: "6th",
-            Enrollment: 544,
-          },
-          GradeEnrollment{
-            Grade: "5th",
-            Enrollment: 544,
-          },
-          GradeEnrollment{
-            Grade: "4th",
-            Enrollment: 544,
-          },
-          GradeEnrollment{
-            Grade: "3th",
-            Enrollment: 544,
-          },
-        },
-      },
-      EnrollmentByYear{
-        Year: "2011-2012",
-        Teachers: 55,
-        Students: 3000,
-        GradeEnrollment: []GradeEnrollment{
-          GradeEnrollment{
-            Grade: "6th",
-            Enrollment: 544,
-          },
-          GradeEnrollment{
-            Grade: "5th",
-            Enrollment: 544,
-          },
-          GradeEnrollment{
-            Grade: "4th",
-            Enrollment: 544,
-          },
-          GradeEnrollment{
-            Grade: "3th",
-            Enrollment: 544,
-          },
-        },
-      },
-    },
-  }
   
-    millardSouth := SchoolWithEnrollment{
-    School: schoolTwo,
-    EnrollmentByYear: []EnrollmentByYear{
-      EnrollmentByYear{
-        Year: "2012-2013",
-        Teachers: 82,
-        Students: 4200,
-        GradeEnrollment: []GradeEnrollment{
-          GradeEnrollment{
-            Grade: "6th",
-            Enrollment: 678,
-          },
-          GradeEnrollment{
-            Grade: "5th",
-            Enrollment: 234,
-          },
-          GradeEnrollment{
-            Grade: "4th",
-            Enrollment: 410,
-          },
-          GradeEnrollment{
-            Grade: "3th",
-            Enrollment: 167,
-          },
-        },
-      },
-      EnrollmentByYear{
-        Year: "2011-2012",
-        Teachers: 56,
-        Students: 3000,
-        GradeEnrollment: []GradeEnrollment{
-          GradeEnrollment{
-            Grade: "6th",
-            Enrollment: 500,
-          },
-          GradeEnrollment{
-            Grade: "5th",
-            Enrollment: 412,
-          },
-          GradeEnrollment{
-            Grade: "4th",
-            Enrollment: 180,
-          },
-          GradeEnrollment{
-            Grade: "3th",
-            Enrollment: 333,
-          },
-        },
-      },
-    },
-  }
-  
-  var schoolsWithEnroll = map[string]SchoolWithEnrollment{
-    "1": millardNorth,
-    "2": millardSouth,
-}
-
-  //Routes
   m.Get("/schools", func(res http.ResponseWriter) string {
-    return render(res, schools)
+    var allSchools = []School{}
+  	db.Find(&allSchools)
+    return render(res, allSchools)
   })
 
+//TODO need to also return stats by year -- needs to return []DistrictsByYear - district level stats for each year and each district
   m.Get("/districts", func(res http.ResponseWriter) string {
+    var allDistricts = []District{}
+    db.Find(&allDistricts)
     return render(res, allDistricts)
   })
 
-  m.Get("/district/:id", func(res http.ResponseWriter) string {
-    return render(res, district66)
+//TODO need to also return stats by year for each school in the district - needs to return SchoolsByYear[] - data for all schools in this district
+  m.Get("/district/:id", func(res http.ResponseWriter, params martini.Params) string {
+    var testDistrict = District{}
+  	db.Where("id = ?", params["id"]).First(&testDistrict)
+    return render(res, testDistrict)
+
   })
 
+//TODO Possible clean-up opportunities here
+//TODO Still need total teacher and student count per year - student count could be calculated from grade counts
   m.Get("/school/:id", func(res http.ResponseWriter, params martini.Params) string {
-    return render(res, schoolsWithEnroll[params["id"]])
+    var testSchool = School{}
+  	db.Where("id = ?",params["id"]).First(&testSchool)
+  	var testStats = []ClassStat{}
+  	db.Where("school_id = ?", params["id"]).Find(&testStats)
+  	
+    var yearsToEnrollments = map[string][]GradeEnrollment{}
+  	for _, row := range testStats {
+  		yearsToEnrollments[row.Years] = append(yearsToEnrollments[row.Years], GradeEnrollment{
+  			Grade: row.Grade,
+  			EnrollmentSize:    row.EnrollmentSize,
+  		})
+  	}
+  	
+  	var enrollmentData = []EnrollmentByYear{}
+  	for year, enrollment := range yearsToEnrollments{
+  		enrollmentData = append(enrollmentData, EnrollmentByYear{
+  			Year: year,
+  			GradeEnrollment: enrollment,
+  		})
+  	}
+  	
+  	var allData = SchoolWithEnrollment {
+  		School: testSchool,
+  		EnrollmentByYear: enrollmentData,
+  	}
+    return render(res, allData)
   })
 
   m.Run()
@@ -222,12 +94,12 @@ func asJson(res http.ResponseWriter, data []byte) string {
 
 //Structs
 type School struct {
-  Id          int64
+  Id    	  int64
   Name        string `sql:"size:255"`
   CountyId    int64
   DistrictId  int64
-  Latitude    float64
-  Longitude   float64
+  //Latitude    float64
+  //Longitude   float64
 }
 
 type SchoolsByYear struct {
@@ -243,8 +115,9 @@ type SchoolYear struct {
 type District struct {
   Id              int64
   Name            string
-  Latitude        float64
-  Longitude       float64
+  CountyId		  int64
+  //Latitude        float64
+  //Longitude       float64
 }
 
 type SchoolWithEnrollment struct {
@@ -252,7 +125,20 @@ type SchoolWithEnrollment struct {
   EnrollmentByYear  []EnrollmentByYear
 }
 
-type EnrollmentByYear struct {
+//Class_Stats table
+//id, schoolId, years, grade, maleStudents, femaleStudents, EnrollmentSize
+
+type ClassStat struct {
+	Id			int64
+	SchoolId	int64
+	Years		string
+	Grade		string
+	MaleStudents	int64
+	FemaleStudents	int64
+	EnrollmentSize	int64
+}
+
+type EnrollmentByYear struct { //EnrollmentByYear
   Year          string
   Teachers      int64
   Students      int64
@@ -260,8 +146,8 @@ type EnrollmentByYear struct {
 }
 
 type GradeEnrollment struct {
-  Grade         string
-  Enrollment    int64
+  Grade         	string
+  EnrollmentSize    int64
 }
 
 type DistrictsByYear struct {
