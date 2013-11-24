@@ -95,6 +95,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 	}
 	
 	
+  $scope.schoolId = 2;
   OpsApi.getSchool($scope.schoolId).success(function (data) {
 		$scope.historicalBarChart = [{key: "Cumulative Return", values:[]}]
 
