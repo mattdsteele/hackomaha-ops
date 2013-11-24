@@ -1,13 +1,40 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>OOPS I DID IT AGAIN</title>
-    <style type="text/css">
-      body {
-        background: url('http://eil.com/images/main/Britney+Spears+-+Oops!...+I+Did+It+Again+-+DOUBLE+CD-295421.jpg');
-        background-size: cover;
-      }
-    </style>
-  </head>
-  <body>
-  </body>
+<html ng-app="opsApp">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>index</title>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/ngApp.js" type="text/javascript" charset="utf-8">
+		
+	</script>
+<link href="js/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">
+	
+<link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+
+</head>
+<body  onload="" ng-controller="OpsCtrl">
+
+	<div id="barchart">
+	    <svg></svg>
+	  </div>
+		
+
+		<div id="">
+			<svg class="gradelevelChart"></svg>
+		</div>
+		<input type="hidden" name="schoolID" value="3" id="some_name" ng-model="schoolId">
+		<button ng-click="drawEnrollmentChart()">push me to see enrollment by year</button>
+
+
+<script src="js/nvd3/lib/d3.v3.js"></script>
+<script src="js/nvd3/nv.d3.min.js"></script>
+<script src="js/nvd3/src/models/legend.js"></script>
+<script src="js/nvd3/src/utils.js"></script>
+<script src="js/nvd3/src/models/distribution.js"></script>
+<script src="js/nvd3/src/models/scatter.js"></script>
+<script src="js/nvd3/src/models/scatterChart.js"></script>
+<script src="js/nvd3/src/tooltip.js"></script>
+			
+</body>
+</html>
