@@ -103,7 +103,8 @@ func main() {
       Latitude : 41.31027811,
       Longitude : -96.146874,
     }
-    db.Where("id = ?",params["id"]).First(&school)
+    schoolId := params["id"]
+    db.Where("id = ?", schoolId).First(&school)
     var classStats = []ClassStat{}
     db.Where("school_id = ?", params["id"]).Find(&classStats)
 
@@ -124,13 +125,20 @@ func main() {
       var classSize int64 = 0
       for _, i := range enrollment { classSize += i.EnrollmentSize }
 
+      type TeacherAmount struct {
+        TeacherSize float64
+      }
+      teacherAmount := TeacherAmount{}
+
+      db.Table("school_stats").Where("school_id = ? and years = ?", schoolId, year).Select("teacher_size").First(&teacherAmount)
+
       enrollmentData = append(enrollmentData, EnrollmentByYear{
         Year: year,
         GradeEnrollment: enrollment,
         Students: classSize,
 
         //FIXME hardcoded data
-        Teachers: 50,
+        Teachers: int64(teacherAmount.TeacherSize),
       })
     }
 
