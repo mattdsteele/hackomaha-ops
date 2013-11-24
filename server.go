@@ -130,7 +130,7 @@ func main() {
     return render(res, allDistricts)
   })
 
-  m.Get("/districts/:id", func(res http.ResponseWriter) string {
+  m.Get("/district/:id", func(res http.ResponseWriter) string {
     return render(res, district66)
   })
 
