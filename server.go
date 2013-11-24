@@ -6,17 +6,26 @@ import (
   "github.com/codegangsta/martini"
   "encoding/json"
   "net/http"
+  "fmt"
+  "os"
 )
 
 func main() {
   m := martini.Classic()
 
-  db, err := sql.Open("mysql", "root@127.0.0.1/ops")
+  dbPassword := os.Getenv("OOPS_DB_PASS")
+  db, err := sql.Open("mysql", "oops:" + dbPassword + "@tcp(15.126.247.23:3306)/oops")
   if err != nil { panic(err) }
   defer db.Close()
 
+  //just a few test queries
+  rows, err := db.Query("SELECT id,name FROM schools")
+  if err != nil { panic(err) }
+  columns, err := rows.Columns()
+  if err != nil { panic(err) }
+  fmt.Printf("%v", columns)
+
   m.Map(db)
-  
 
   //All fake data
   schoolOne := School{
