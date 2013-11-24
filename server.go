@@ -70,6 +70,8 @@ func main() {
 
     schoolsInDistrict := []School{}
     db.Where("district_id = ?", params["id"]).Find(&schoolsInDistrict)
+    
+    //db.Where("school_id = ? and years = ?", schoolId, year).Select("teacher_size").First(&teacherAmount)
 
     for _, year := range years {
 
@@ -95,8 +97,7 @@ func main() {
 
   })
 
-  //TODO Possible clean-up opportunities here
-  //TODO Still need total teacher count per year
+  //TODO Possible clean-up opportunities here, but it's looking pretty decent
   m.Get("/school/:id", func(res http.ResponseWriter, params martini.Params) string {
     var school = School{
       //FIXME hardcoded data
@@ -105,9 +106,10 @@ func main() {
     }
     schoolId := params["id"]
     db.Where("id = ?", schoolId).First(&school)
+    
     var classStats = []ClassStat{}
     db.Where("school_id = ?", params["id"]).Find(&classStats)
-
+    
     var yearsToEnrollments = map[string][]GradeEnrollment{}
     for _, row := range classStats {
       if row.EnrollmentSize > 0 {
@@ -117,28 +119,29 @@ func main() {
         })
       }
     }
+    
+    var schoolStats = []SchoolStat{}
+    db.Where("school_id = ? and teacher_size is not null", params["id"]).Find(&schoolStats)
+    
+    var yearsToTotalStats = map[string]SchoolStat{}
+    for _, row := range schoolStats {
+    	yearsToTotalStats[row.Years] = row
+    }
 
     var enrollmentData = []EnrollmentByYear{}
     for year, enrollment := range yearsToEnrollments{
 
       //calculate Students field
+      //Could pull from SchoolStat, but will want to change
+      //query above and deal properly with teacher_size being null
       var classSize int64 = 0
       for _, i := range enrollment { classSize += i.EnrollmentSize }
-
-      type TeacherAmount struct {
-        TeacherSize float64
-      }
-      teacherAmount := TeacherAmount{}
-
-      db.Table("school_stats").Where("school_id = ? and years = ?", schoolId, year).Select("teacher_size").First(&teacherAmount)
 
       enrollmentData = append(enrollmentData, EnrollmentByYear{
         Year: year,
         GradeEnrollment: enrollment,
         Students: classSize,
-
-        //FIXME hardcoded data
-        Teachers: int64(teacherAmount.TeacherSize),
+        Teachers: int64(yearsToTotalStats[year].TeacherSize),
       })
     }
 
@@ -165,4 +168,3 @@ func asJson(res http.ResponseWriter, data []byte) string {
   res.Header().Set("Access-Control-Allow-Origin", "*")
   return string(data[:])
 }
-
