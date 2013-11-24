@@ -80,3 +80,12 @@ div {
 .gradelevelChart rect:hover {
   fill: brown;
 }
+
+
+.wrap{
+  width: 100%;
+}
+#map{
+  max-width: 100%;
+  height:320px;
+}
