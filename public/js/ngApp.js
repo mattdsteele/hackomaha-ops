@@ -29,8 +29,18 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 	$scope.schoolsForDistrict =[]
   $scope.districtInView ={name:'OPS',Id:28801} ;
 
+  $scope.cardName = "This is a new Card Name";
+  $scope.totalSchools = "1,367";
+  $scope.totalEnrollment = "5,297";
+  $scope.totalTeachers = "632";
+  $scope.cardYear = "2012-2013";
+
+  $scope.updateCards = function(){
+    // $scope.districtName = "This is a new District";
+  }
+
   $scope.updateSchoolCharts = function(){
-		//todo add codd for the card change
+    // TODO: Add card update info
   }
 
 	 	$scope.yearAry=['2002/2003','2003/2004','2004/2005','2005/2006','2006/2007','2007/2008','2008/2009','2009/2010',

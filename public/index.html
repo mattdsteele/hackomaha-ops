@@ -16,6 +16,7 @@
 
 </head>
 <body  class="" ng-controller="OpsCtrl">
+
 <div class="container">
 	<h1>OOPS</h1>
 <div class="row">
@@ -45,23 +46,49 @@
 				</div>
 		  </div><!-- /.navbar-collapse -->
 		</nav>
-		<div class="row">
-
-				<div id="ratioData" class="col-xs-6 col-sm-4">
-						<span class="bold">Ratio Data:</span> <br/>
-						Total number of teachers:<br/> <span class='bigNumbers'>{{numberOfTeachers}}123</span><br/>
-						Total number of students:<br/> <span class='bigNumbers steelBlue'>{{numberOfStudents}}123</span>
-					</div>
-					<div id="" class="col-xs-6 col-sm-4">
-						<div id="stackedGradesByYear">
-
-						</div>
-					</div>
+		<div class="row school">
+			<div id="ratioData" class="col-xs-6 col-sm-4">
+        <h2>{{cardName}}</h2>
+        <h3 style="margin-top: 0;font-style: italic; font-size: 18px;">{{cardYear}}</h3>
+				<div class="clearfix" style="margin-top: 20px;padding:40px 10px 0 10px; border-top: 3px solid rgba(0,0,0,0.2);">
+          <p class="panel panel-default col-xs-5" style="text-align: center;padding: 20px 0;background-color: rgba(38,92,43,0.2);">Total Enrollment<br>
+            <span class="bigNumbers">{{totalEnrollment}}</span>
+          </p>
+          <p class="panel panel-default col-xs-5" style="text-align: center;margin-left: 50px;padding: 20px 0;background-color: rgba(38,92,43,0.2);">Total Teachers<br>
+            <span class="bigNumbers">{{totalTeachers}}</span>
+          </p>
+        </div>
+			</div>
+			<div id="" class="col-xs-6 col-sm-4">
+				<div id="stackedGradesByYear">
 
 				</div>
-	</div>
+			</div>
 
+		</div>
+
+    <div class="row district">
+      <div id="ratioData" class="col-xs-6 col-sm-4">
+        <h2>{{cardName}}</h2>
+        <h3 style="margin-top: 0;">Schools: {{totalSchools}}</h3>
+        <div class="clearfix" style="margin-top: 20px;padding-top:40px; border-top: 5px solid rgba(0,0,0,0.2);">
+          <p class="panel panel-default col-xs-5" style="text-align: center;padding: 20px 0;background-color: rgba(38,92,43,0.2);">Total Enrollment<br>
+            <span class="bigNumbers">{{totalEnrollment}}</span>
+          </p>
+          <p class="panel panel-default col-xs-5" style="text-align: center;margin-left: 60px;padding: 20px 0;background-color: rgba(38,92,43,0.2);">Total Teachers<br>
+            <span class="bigNumbers">{{totalTeachers}}</span>
+          </p>
+        </div>
+      </div>
+      <div class="col-xs-6 col-sm-4">
+        <div id="stackedGradesByYear">
+
+        </div>
+      </div>
+    </div>
+	</div>
 </div>
+
 <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="js/nvd3/lib/d3.v3.js"></script>
 <script src="js/nvd3/nv.d3.min.js"></script>
