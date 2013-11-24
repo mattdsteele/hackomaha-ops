@@ -49,7 +49,7 @@ type SchoolStat struct {
 	SchoolId		int64
 	Years			string
 	EnrollmentSize	int64
-	TeacherSize		float64
+	TeacherSize		string
 }
 
 type EnrollmentByYear struct {

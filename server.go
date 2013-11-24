@@ -5,6 +5,7 @@ import (
   "encoding/json"
   "net/http"
   "os"
+  "strconv"
   "github.com/jinzhu/gorm"
   _ "github.com/go-sql-driver/mysql"
 )
@@ -63,6 +64,11 @@ func main() {
 
     return render(res, districtsByYear)
   })
+  
+  type YearAndSchool struct {
+  	SchoolId	int64
+  	Years 		string
+  }
 
   //TODO need to also return stats by year for each school in the district
   m.Get("/district/:id", func(res http.ResponseWriter, params martini.Params) string {
@@ -71,18 +77,32 @@ func main() {
     schoolsInDistrict := []School{}
     db.Where("district_id = ?", params["id"]).Find(&schoolsInDistrict)
     
-    //db.Where("school_id = ? and years = ?", schoolId, year).Select("teacher_size").First(&teacherAmount)
-
+    var schoolStats = []SchoolStat{}  
+    db.Where("school_id LIKE ? and teacher_size is not null", params["id"] + "%").Find(&schoolStats)
+    
+    schoolAndYearToStats := map[YearAndSchool]SchoolStat{}
+    for _, schoolStat := range schoolStats {
+    	schoolAndYearToStats[YearAndSchool{
+    		SchoolId: schoolStat.SchoolId,
+    		Years: schoolStat.Years,
+    	}] = schoolStat
+    }
+    
+    //TODO Use years from db?
     for _, year := range years {
 
-      //calculate school enrollment & append it
       schoolsInYear := []SchoolYear{}
       for _, school := range schoolsInDistrict {
-        schoolsInYear = append(schoolsInYear, SchoolYear {
-          //FIXME hardcoded
-          EnrollmentSize: 552,
-          School: school,
-        })
+        var enrollment = schoolAndYearToStats[YearAndSchool{
+    		SchoolId: school.Id,
+    		Years: year,
+    		}].EnrollmentSize
+    	if enrollment > 0 {
+	        schoolsInYear = append(schoolsInYear, SchoolYear {
+	          EnrollmentSize: enrollment,
+	          School: school,
+	        })
+        }
       }
 
       schoolsByYear = append(schoolsByYear, SchoolsByYear{
@@ -91,8 +111,6 @@ func main() {
       })
     }
 
-    var testDistrict = District{}
-    db.Where("id = ?", params["id"]).First(&testDistrict)
     return render(res, schoolsByYear)
 
   })
@@ -137,11 +155,12 @@ func main() {
       var classSize int64 = 0
       for _, i := range enrollment { classSize += i.EnrollmentSize }
 
+	  teachersAsFloat, _ := strconv.ParseFloat(yearsToTotalStats[year].TeacherSize, 64)
       enrollmentData = append(enrollmentData, EnrollmentByYear{
         Year: year,
         GradeEnrollment: enrollment,
         Students: classSize,
-        Teachers: int64(yearsToTotalStats[year].TeacherSize),
+        Teachers: int64(teachersAsFloat),
       })
     }
 
