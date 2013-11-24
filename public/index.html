@@ -15,19 +15,16 @@
 </head>
 <body  class="" ng-controller="OpsCtrl">
 <div class="container">
-  <div class="map-wrap">
-    <div id="map"></div>
-  </div>
 	<div id="schoolTableInfo" >
 		<nav class="navbar navbar-default" role="navigation">
 		  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<div class="nav navbar-nav">
-					<button ng-repeat="x in yearAry" type="button" class="btn btn-default navbar-btn">{{x}} </button>
+					<button ng-repeat="x in yearAry" type="button" class="btn btn-default navbar-btn" ng-click="updateSchoolCharts()">{{x}} </button>
 				</div>
 		  </div><!-- /.navbar-collapse -->
 		</nav>
 		<div class="row">
-			
+
 				<div id="ratioData" class="col-xs-6 col-sm-4">
 						<span class="bold">Ratio Data:</span> <br/>
 						Total number of teachers:<br/> <span class='bigNumbers'>{{numberOfTeachers}}123</span><br/>
@@ -35,8 +32,8 @@
 					</div>
 					<div id="" class="col-xs-6 col-sm-4">
 						<div id="stackedGradesByYear">
-		
-						</div>						
+
+						</div>
 					</div>
 
 				</div>
@@ -44,8 +41,6 @@
 
 </div>
 <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="http://www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Fmjtd%7Cluubn90bnl%2Cbn%3Do5-902g1u"></script>
-<script src="js/map.js"></script>
 <script src="js/nvd3/lib/d3.v3.js"></script>
 <script src="js/nvd3/nv.d3.min.js"></script>
 <script src="js/nvd3/src/models/legend.js"></script>
