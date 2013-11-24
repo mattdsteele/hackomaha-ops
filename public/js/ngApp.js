@@ -24,18 +24,24 @@ opsAppModule.factory('OpsApi', function ($http) {
 
 opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 
-  $scope.schoolId = 2;
-
-	$scope.schoolsForDistrict =[]
-  $scope.districtInView ={name:'OPS',Id:28801} ;
-
-  $scope.cardName = "This is a new Card Name";
-  $scope.totalSchools = "1,367";
-  $scope.totalEnrollment = "5,297";
-  $scope.totalTeachers = "632";
-  $scope.cardYear = "2012-2013";
 
   $scope.updateCards = function(){
+    //fake data
+
+    OpsApi.getSchool($scope.schoolInView).success(function (data){
+      console.log(data);
+      $scope.cardName = data.School.Name;
+      var enrollmentLevel = data.EnrollmentByYear[0];
+      $scope.totalEnrollment = enrollmentLevel.Students;
+      $scope.totalTeachers = enrollmentLevel.Teachers;
+    });
+    $scope.schoolId = 2;
+
+    $scope.schoolsForDistrict =[]
+    $scope.districtInView ={name:'OPS',Id:28801} ;
+
+    $scope.totalSchools = "1,367";
+    $scope.cardYear = "2012-2013";
     // $scope.districtName = "This is a new District";
   }
   $scope.districtChanged = function() {
@@ -46,8 +52,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
   };
 
   $scope.updateSchoolCharts = function(){
-    console.log('new card is here');
-    // TODO: Add card update info
+    $scope.updateCards();
   }
 
 	 	$scope.yearAry=['2002/2003','2003/2004','2004/2005','2005/2006','2006/2007','2007/2008','2008/2009','2009/2010',
