@@ -21,7 +21,7 @@
 <div class="row">
 	<div class="col-md-4">
 		<label >District</label>
-		<select class="form-control " >
+		<select class="form-control" ng-model="currentDistrict" ng-change="districtChanged()" >
 	    <option value="">-- choose District --</option>
 			<option ng-repeat="district in districtList" value="{{district.Id}}" ng-model="districtInView" >
 			        {{district.Name}}
@@ -30,7 +30,7 @@
 	</div>
 	<div class="col-md-4">
 	<label >School</label>
-	<select class="form-control col-md-4" ng-model="schoolInView">
+	<select class="form-control col-md-4" ng-model="schoolInView" >
     <option value="">-- choose School --</option>
 		<option ng-repeat="school in schoolsForDistrict" value="{{school.Id}}" ng-model="schoolInView" >
 		        {{school.Name}}
