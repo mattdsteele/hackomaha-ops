@@ -23,16 +23,16 @@ func main() {
     Name: "Millard North High School",
     CountyId: 1,
     DistrictId: 1,
-    Latitude: -35.22,
-    Longitude: 45.12,
+    Latitude: 41.31027811,
+    Longitude: -96.146874,
   }
   schoolTwo := School{
     Id: 2,
     Name: "Millard South High School",
     CountyId: 1,
     DistrictId: 1,
-    Latitude: -35.22,
-    Longitude: 45.12,
+    Latitude: 41.31027811,
+    Longitude: -96.146874,
   }
   schools := []School{schoolOne, schoolTwo}
 
@@ -41,8 +41,8 @@ func main() {
     District: District{
       Id: 15,
       Name: "OPS",
-      Latitude: 72.12345,
-      Longitude: 45.215,
+      Latitude: 41.31027811,
+      Longitude: -96.146874,
     },
   }
 
@@ -153,6 +153,7 @@ func asJson(res http.ResponseWriter, data []byte) string {
   return string(data[:])
 }
 
+//Structs
 type School struct {
   Id          int64
   Name        string `sql:"size:255"`
