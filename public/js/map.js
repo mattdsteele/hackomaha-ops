@@ -5,10 +5,12 @@ var OPS = {
 
   init: function(){
 
-    // $.getJSON("http://15.126.247.23:3000/districts", function(json) {
-    //   OPS.data = json;
-    // });
-    maps.init();
+    $.getJSON(api_url + "districts", function(json) {
+      OPS.curData = json;
+      maps.init();
+    });
+
+
   }
 
 };
@@ -45,12 +47,10 @@ var maps = {
   },
 
   loadCollectionData: function(type, id){
-    var newDataURL = api_url + type + id;
+    // var newDataURL = api_url + type + id;
 
     // console.log(newDataURL);
 
-    $.getJSON(newDataURL, function(json) {
-      OPS.curData = json;
       switch(type){
         case 'districts':
           maps.addDistrictCollection(OPS.curData, 0);
@@ -60,7 +60,6 @@ var maps = {
           maps.addSchoolsCollection(OPS.curData);
           break;
       }
-    });
 
 
   },
@@ -77,8 +76,6 @@ var maps = {
       var district = d[i];
       var districtSize = district['EnrollmentSize'] * 0.05;
       var districtID = district['District']['Id'];
-
-      console.log(district['District']['Longitude']);
 
       mapCircle.radiusUnit = 'MI';
       mapCircle.radius = districtSize;
@@ -99,28 +96,29 @@ var maps = {
 
   },
 
-  addSchoolsCollection: function(data){
+  addSchoolsCollection: function(data, year){
     var collection = new MQA.ShapeCollection();
     collection.maxZoomLevel = 7;
 
-    for(i=0; i < data.length; i++){
+    var s = data[year]['Schools'];
+
+    for(i=0; i < s.length; i++){
       var mapCircle = new MQA.CircleOverlay();
 
-      var district = data[i]['Districts'][i];
-      var districtSize = data[i]['Districts'][i]['EnrollmentSize'] * 0.05;
-      var districtID = data[i]['Districts'][i]['District']['Id'];
-      var latLong = data[i]['Districts'][i]['District']['Latitude'] + ', ' + data[i]['Districts'][i]['District']['Longitude'];
+      var school = s[i];
+      var schoolSize = school['EnrollmentSize'] * 0.05;
+      var schoolID = school['School']['Id'];
 
       mapCircle.radiusUnit = 'MI';
-      mapCircle.radius = districtSize;
-      mapCircle.shapePoints = [data[i]['Districts'][i]['District']['Latitude'], data[i]['Districts'][i]['District']['Longitude']];
+      mapCircle.radius = schoolSize;
+      mapCircle.shapePoints = [school['School']['Latitude'], school['School']['Longitude']];
       mapCircle.colorAlpha = 0.5;
       mapCircle.borderWidth = 0;
       mapCircle.fillColor = '#05c0e2';
-      mapCircle.fillColorAlpha = 0.4;
-      mapCircle.district_id = districtID;
+      mapCircle.fillColorAlpha = 0.05;
+      mapCircle.school_id = schoolID;
 
-      MQA.EventManager.addListener(mapCircle, 'click', getDistrict);
+      MQA.EventManager.addListener(mapCircle, 'click', showGraphs);
 
       collection.add(mapCircle);
     }
@@ -136,11 +134,22 @@ var maps = {
 
 
 function loadCollection(evt){
-  var district_url = "http://15.126.247.23:3000/district/" + this.district_id;
-  $.getJSON(district_url, function(data) {
-    console.log(data);
+  var district_url = api_url + 'district/' + this.district_id;
+
+  // console.log(this.district_id);
+
+  $.getJSON(district_url, function(json) {
+    OPS.curData = json;
+    // console.log(OPS.curData);
+    map.removeAllShapes();
+    maps.addSchoolsCollection(OPS.curData, 0);
   });
 }
+
+function showGraphs(evt){
+  console.log(this.school_id);
+}
+
 (function($){
 
   OPS.init();
