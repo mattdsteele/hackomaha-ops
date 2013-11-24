@@ -38,6 +38,13 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
   $scope.updateCards = function(){
     // $scope.districtName = "This is a new District";
   }
+  $scope.districtChanged = function() {
+    console.log($scope.currentDistrict);
+    $scope.schoolsForDistrict.push({
+      Name: "Hello",
+      Id: "What"
+    });
+  };
 
   $scope.updateSchoolCharts = function(){
     // TODO: Add card update info
@@ -163,6 +170,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 	 		       .text(function(d) { return d; });
 	 		 }
 
+
 	 	$scope.drawStackedBar($scope.schoolId);
 		//populate district and school dropdown
 		 OpsApi.getDistricts().success(function(data){
@@ -170,7 +178,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 			 $scope.schoolsForDistrict=[];
 			 console.log(data)
 			 for(var i=0; i < data.length; i++){
-				 $scope.districtList.push({ Name: data[i]['Name'], Id:data[i]['Id']}))
+				 $scope.districtList.push({ Name: data[i]['Name'], Id:data[i]['Id']})
 			 }
 			 //need to add school list 
 
