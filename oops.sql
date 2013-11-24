@@ -8,10 +8,14 @@
 # Host: schools.dataomaha.com (MySQL 5.5.34-0ubuntu0.12.04.1)
 # Database: oops
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Generation Time: 2013-11-24 22:04:45 +0000
 =======
 # Generation Time: 2013-11-24 21:36:33 +0000
 >>>>>>> Database current as of now
+=======
+# Generation Time: 2013-11-24 21:36:33 +0000
+>>>>>>> master
 # ************************************************************
 
 
@@ -49483,7 +49487,10 @@ UNLOCK TABLES;
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> master
 # Dump of table district_years
 # ------------------------------------------------------------
 
@@ -49499,7 +49506,10 @@ CREATE TABLE `district_years` (
 
 
 
+<<<<<<< HEAD
 >>>>>>> Database current as of now
+=======
+>>>>>>> master
 # Dump of table districts
 # ------------------------------------------------------------
 
