@@ -39,14 +39,14 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
     // $scope.districtName = "This is a new District";
   }
   $scope.districtChanged = function() {
-    console.log($scope.currentDistrict);
-    $scope.schoolsForDistrict.push({
-      Name: "Hello",
-      Id: "What"
-    });
+    var districtsInSchool = $scope.allDistricts.filter(function(i) {
+      return i.Id == $scope.currentDistrict;
+    })[0];
+    $scope.schoolsForDistrict = districtsInSchool.Schools;
   };
 
   $scope.updateSchoolCharts = function(){
+    console.log('new card is here');
     // TODO: Add card update info
   }
 
@@ -174,9 +174,9 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 	 	$scope.drawStackedBar($scope.schoolId);
 		//populate district and school dropdown
 		 OpsApi.getDistricts().success(function(data){
+       $scope.allDistricts = data;
 			 $scope.districtList=[];	
 			 $scope.schoolsForDistrict=[];
-			 console.log(data)
 			 for(var i=0; i < data.length; i++){
 				 $scope.districtList.push({ Name: data[i]['Name'], Id:data[i]['Id']})
 			 }

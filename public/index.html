@@ -31,7 +31,7 @@
 	</div>
 	<div class="col-md-4">
 	<label >School</label>
-	<select class="form-control col-md-4" ng-model="schoolInView" >
+	<select class="form-control col-md-4" ng-model="schoolInView" ng-change="updateSchoolCharts()" >
     <option value="">-- choose School --</option>
 		<option ng-repeat="school in schoolsForDistrict" value="{{school.Id}}" ng-model="schoolInView" >
 		        {{school.Name}}
