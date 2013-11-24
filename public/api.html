@@ -1,0 +1,136 @@
+<html>
+    The api for the OPS school data has been kept simple for future extensibility. All calls result in a
+    returned json string. The available calls are as follows:
+
+    <h3>District Calls</h3>
+
+    <h4>/districts</h4>
+
+    Calls to /district will return a sorted list of all the districts with data on each district, including the
+    a sorted list of all schools within that district. An example follows:
+
+    <pre>
+    [{
+    "Id": 280709,
+    "Name": "All Saints Catholic School",
+    "CountyId": 28,
+    "Schools": [{
+    "Id": 280709001,
+    "Name": "All Saints Catholic School",
+    "CountyId": 28,
+    "DistrictId": 280709,
+    "Lat": 0,
+    "Lon": 0
+    }]
+    </pre>
+
+    <h4>/district/:id</h4>
+
+    Furthermore, you can also specify a particular district id to get only that district. This call will return
+    detailed information based on year for that specified district. For example, a call to /district/280749 will
+    result in:
+
+    <pre>
+    {
+    "District": {
+    "Id": 280749,
+    "Name": "Skutt Catholic High School",
+    "CountyId": 28,
+    "Schools": null,
+    "Lat": 0,
+    "Lon": 0
+    },
+    "EnrollmentsByYear": [{
+    "Year": "20022003",
+    "Teachers": 0,
+    "Students": 645,
+    "GradeEnrollment": [{
+    "Grade": "09",
+    "EnrollmentSize": 163
+    }, {
+    "Grade": "10",
+    "EnrollmentSize": 196
+    }, {
+    "Grade": "11",
+    "EnrollmentSize": 142
+    }, {
+    "Grade": "12",
+    "EnrollmentSize": 144
+    }]
+    },
+    </pre>
+
+    And so forth for all the available years.
+    
+    <h3>School Calls</h3>
+    
+    <h4>/schools</h4>
+
+    Calls to /schools will return a sorted list of all the schools with data on each school. Here's an example:
+
+    <pre>
+      "Id": 770001021,
+      "Name": "Bellevue Elementary School",
+      "CountyId": 77,
+      "DistrictId": 770001,
+      "Lat": 41.1267,
+      "Lon": -95.9912
+      },
+    </pre>
+
+    <h4>/school/:id</h4>
+
+    As with districts, you can specify a school id to get just that school. This data also includes enrollment
+    by year with class size. Subsequently, querying the on the above school id will give you: 
+
+    <pre>
+    {
+    "School": {
+    "Id": 770001021,
+    "Name": "Bellevue Elementary School",
+    "CountyId": 77,
+    "DistrictId": 770001,
+    "Lat": 41.12670135498047,
+    "Lon": -95.99120330810547
+    },
+    "EnrollmentByYear": [{
+    "Year": "20092010",
+    "Teachers": 0,
+    "Students": 432,
+    "GradeEnrollment": [{
+    "Grade": "01",
+    "EnrollmentSize": 56
+    }, {
+    "Grade": "02",
+    "EnrollmentSize": 55
+    }, {
+    "Grade": "03",
+    "EnrollmentSize": 56
+    }, {
+    "Grade": "04",
+    "EnrollmentSize": 56
+    }, {
+    "Grade": "05",
+    "EnrollmentSize":
+    73
+    }, {
+    "Grade":
+    "06",
+    "EnrollmentSize":
+    55
+    },
+    {
+    "Grade":
+    "K",
+    "EnrollmentSize":
+    61
+    },
+    {
+    "Grade":
+    "PK",
+    "EnrollmentSize":
+    20
+    }]
+    }, 
+    </pre>
+</html>
