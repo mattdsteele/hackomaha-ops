@@ -26,10 +26,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 
 
   $scope.updateCards = function(){
-    //fake data
-
     OpsApi.getSchool($scope.schoolInView).success(function (data){
-      console.log(data);
       $scope.cardName = data.School.Name;
       var schoolId = data.School.Id;
       var enrollmentLevel = data.EnrollmentByYear[0];
@@ -37,14 +34,8 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
       $scope.totalTeachers = enrollmentLevel.Teachers;
       $scope.drawStackedBar(schoolId);
     });
-    $scope.schoolId = 2;
-
-    $scope.schoolsForDistrict =[]
-    $scope.districtInView ={name:'OPS',Id:28801} ;
-
     $scope.totalSchools = "1,367";
     $scope.cardYear = "2012-2013";
-    // $scope.districtName = "This is a new District";
   }
   $scope.districtChanged = function() {
     var districtsInSchool = $scope.allDistricts.filter(function(i) {
@@ -185,11 +176,13 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
        $scope.allDistricts = data;
 			 $scope.districtList=[];	
 			 $scope.schoolsForDistrict=[];
+       var ops;
 			 for(var i=0; i < data.length; i++){
-				 $scope.districtList.push({ Name: data[i]['Name'], Id:data[i]['Id']})
+         var id = { Name: data[i]['Name'], Id:data[i]['Id']};
+         if (data[i].Id == 280001) {
+           ops = id;
+         }
+				 $scope.districtList.push(id);
 			 }
-			 //need to add school list 
-
-			 	
 		 });
 });
