@@ -44,12 +44,28 @@ type ClassStat struct {
         EnrollmentSize        int64
 }
 
+type DistrictClassStats struct {
+        Id                        int64
+        DistrictId        int64
+        Years                string
+        Grade                string
+        MaleStudents          int64
+        FemaleStudents        int64
+        EnrollmentSize        int64
+        TeacherSize           int64
+}
+
 //School_Stats table - already exists with this plus more
 type SchoolStat struct {
 	SchoolId		int64
 	Years			string
 	EnrollmentSize	int64
 	TeacherSize		string
+}
+
+type DistrictWithYears struct {
+  District          District
+  EnrollmentsByYear []EnrollmentByYear
 }
 
 type EnrollmentByYear struct {
