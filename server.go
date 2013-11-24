@@ -31,9 +31,35 @@ func main() {
 
   //TODO need to also return stats by year -- needs to return []DistrictsByYear - district level stats for each year and each district
   m.Get("/districts", func(res http.ResponseWriter) string {
-    var allDistricts = []District{}
+    allDistricts := []District{}
     db.Find(&allDistricts)
-    return render(res, allDistricts)
+
+    years := []string{"20022003", "20032004", "20042005", "20052006", "20062007", "20072008", "20082009", "20092010", "20102011", "20112012", "20122013"}
+    districtsByYear := []DistrictsByYear{}
+    for _, year := range years {
+      districtByYear := DistrictsByYear{
+        Year: year,
+      }
+
+      allDistrictsWithYears := []DistrictYear{}
+      for _, district := range allDistricts {
+
+        //FIXME hardcoded
+        district.Latitude = 41.31027811
+        district.Longitude = -96.146874
+
+        districtWithYear := DistrictYear {
+          EnrollmentSize: 2555,
+          District: district,
+        }
+        allDistrictsWithYears = append(allDistrictsWithYears, districtWithYear)
+      }
+
+      districtByYear.Districts = allDistrictsWithYears
+      districtsByYear = append(districtsByYear, districtByYear)
+    }
+
+    return render(res, districtsByYear)
   })
 
   //TODO need to also return stats by year for each school in the district - needs to return SchoolsByYear[] - data for all schools in this district
