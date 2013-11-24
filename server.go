@@ -23,6 +23,8 @@ func main() {
     Name: "Millard North High School",
     CountyId: 1,
     DistrictId: 1,
+    Latitude: -35.22,
+    Longitude: 45.12,
     ClassStats: []ClassStat{
       ClassStat{
         SchoolId: 1,
@@ -53,6 +55,17 @@ func main() {
     },
   }
 
+  schoolYearOne := SchoolYear{
+    EnrollmentSize: 55,
+    School: schoolOne,
+  }
+  district66 := SchoolsByYear{
+    Year: "2012-2013",
+    Schools: []SchoolYear{
+      schoolYearOne,
+    },
+  }
+
   allDistricts := []DistrictsByYear{
     DistrictsByYear{
       Year: "2012-2013",
@@ -70,6 +83,10 @@ func main() {
 
   m.Get("/districts", func(res http.ResponseWriter) string {
     return render(res, allDistricts)
+  })
+
+  m.Get("/districts/:id", func(res http.ResponseWriter) string {
+    return render(res, district66)
   })
 
   m.Get("/schools/:id", func(res http.ResponseWriter, params martini.Params) string {
@@ -114,7 +131,19 @@ type School struct {
   Name        string `sql:"size:255"`
   CountyId    int64
   DistrictId  int64
+  Latitude    float64
+  Longitude   float64
   ClassStats  []ClassStat
+}
+
+type SchoolsByYear struct {
+  Year        string
+  Schools     []SchoolYear
+}
+
+type SchoolYear struct {
+  EnrollmentSize  int64
+  School          School
 }
 
 type District struct {
@@ -122,6 +151,12 @@ type District struct {
   Name            string
   Latitude        float64
   Longitude       float64
+}
+
+
+type DistrictsWithSchools struct {
+  District        District
+  Schools         []School
 }
 
 type DistrictsByYear struct {
