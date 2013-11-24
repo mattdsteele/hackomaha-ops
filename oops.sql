@@ -5,9 +5,13 @@
 # http://www.sequelpro.com/
 # http://code.google.com/p/sequel-pro/
 #
-# Host: 127.0.0.1 (MySQL 5.5.14)
+# Host: schools.dataomaha.com (MySQL 5.5.34-0ubuntu0.12.04.1)
 # Database: oops
+<<<<<<< HEAD
 # Generation Time: 2013-11-24 22:04:45 +0000
+=======
+# Generation Time: 2013-11-24 21:36:33 +0000
+>>>>>>> Database current as of now
 # ************************************************************
 
 
@@ -49478,6 +49482,24 @@ VALUES
 UNLOCK TABLES;
 
 
+<<<<<<< HEAD
+=======
+# Dump of table district_years
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `district_years`;
+
+CREATE TABLE `district_years` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `district_id` int(11) unsigned NOT NULL,
+  `years` varchar(8) NOT NULL DEFAULT '',
+  `enrollment_size` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+>>>>>>> Database current as of now
 # Dump of table districts
 # ------------------------------------------------------------
 
