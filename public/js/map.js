@@ -1,6 +1,6 @@
 var timeline = [];
 
-$.getJSON("http://15.126.247.23:3000/districts", function(data) {
+$.getJSON("http://localhost:3000/districts", function(data) {
   timeline = data;
 });
 

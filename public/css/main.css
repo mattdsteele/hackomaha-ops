@@ -60,14 +60,6 @@ div {
 */
 
 
-#test1 {
-  margin: 0;
-}
-
-#test1 svg {
-  height: 300px;
-}
-
 .gradelevelChart rect {
   fill: steelblue;
 }
