@@ -11,10 +11,32 @@
 	<link href="js/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">  -->
 	<link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="js/chosen/chosen.min.css">
+
 
 </head>
 <body  class="" ng-controller="OpsCtrl">
 <div class="container">
+	<h1>OOPS</h1>
+<div class="row">
+	<div class="col-md-4">
+		<label >District</label>
+		<select class="form-control " >
+	    <option value="">-- choose District --</option>
+			<option ng-repeat="district in districtList" value="{{district.Id}}" ng-model="districtInView" >
+			        {{district.Name}}
+			    </option>
+	  </select>
+	</div>
+	<div class="col-md-4">
+	<label >School</label>
+	<select class="form-control col-md-4" ng-model="schoolInView">
+    <option value="">-- choose School --</option>
+		<option ng-repeat="school in schoolsForDistrict" value="{{school.Id}}" ng-model="schoolInView" >
+		        {{school.Name}}
+		    </option>
+  </select></div>
+</div>
 	<div id="schoolTableInfo" >
 		<nav class="navbar navbar-default" role="navigation">
 		  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -50,6 +72,7 @@
 <script src="js/nvd3/src/models/scatterChart.js"></script>
 <script src="js/nvd3/src/tooltip.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+<script src="js/chosen/chosen.jquery.min.js"></script>
 
 </body>
 </html>
