@@ -32,7 +32,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
       var enrollmentLevel = data.EnrollmentByYear[data.EnrollmentByYear.length - 1];
       $scope.totalEnrollment = enrollmentLevel.Students;
       $scope.totalTeachers = enrollmentLevel.Teachers;
-      $scope.drawStackedBar(schoolId);
+      $scope.drawStackedBar(schoolId, "school");
     });
     $scope.totalSchools = "1,367";
     $scope.cardYear = "2012-2013";
@@ -42,6 +42,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
       return i.Id == $scope.currentDistrict;
     })[0];
     $scope.schoolsForDistrict = districtsInSchool.Schools;
+    $scope.drawStackedBar($scope.currentDistrict, "district");
   };
 
   $scope.updateSchoolCharts = function(){
@@ -54,11 +55,17 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
     $scope.schoolInView = 280001005;
 	 	$scope.schoolId = 280001005; //fixme get rid of this
 	 	//this is the one to use for UI
-	 		 $scope.drawStackedBar = function(schoolId){
-	 			 OpsApi.getSchool(schoolId).success(function (data){
-	 				 $scope.createStackedBar($scope.mungeDataForStackedBar(data));
-	 			 });
-	 		 }
+    $scope.drawStackedBar = function(id, type){
+      if (type == "school") {
+        OpsApi.getSchool(id).success(function (data){
+          $scope.createStackedBar($scope.mungeDataForStackedBar(data));
+        });
+      } else {
+        OpsApi.getDistrict(id).success(function(data) {
+          $scope.createStackedBar($scope.mungeDistrictData(data));
+        });
+      }
+    }
 			 /* reference 
 			  [{"Year":"1","Grade 09":"591","Grade 10":"485","Grade 11":"453","Grade 12":"430"},
 				  {"Year":"1","Grade 09":"591","Grade 10":"485","Grade 11":"453","Grade 12":"430"}
@@ -77,6 +84,21 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 	 	 		}
 	 	 			return mungedData;
 	 	 	}
+      $scope.mungeDistrictData = function(data) {
+	 	 		var yearsData = data['EnrollmentsByYear'];
+	 	 		var mungedData = [];
+	 	 		for(var i=0; i < yearsData.length; i++){
+	 	 			var aryItem = {"Year":yearsData[i]['Year']}
+	 	 			var gradeEnrollmentAry = yearsData[i]["GradeEnrollment"]
+          if (gradeEnrollmentAry) {
+            for(var j=0 ; j< gradeEnrollmentAry.length; j++){
+              aryItem["Grade " +	gradeEnrollmentAry[j]['Grade']] = gradeEnrollmentAry[j]['EnrollmentSize'];
+            }
+            mungedData.push(aryItem);
+          }
+	 	 		}
+	 	 			return mungedData;
+      };
 
 	 		 $scope.createStackedBar = function(data){
 	 			 var margin = {top: 20, right: 40, bottom: 30, left: 40},
@@ -171,7 +193,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 	 		 }
 
 
-	 	$scope.drawStackedBar($scope.schoolId);
+	 	$scope.drawStackedBar($scope.schoolId, "school");
 		//populate district and school dropdown
 		 OpsApi.getDistricts().success(function(data){
        $scope.allDistricts = data;
