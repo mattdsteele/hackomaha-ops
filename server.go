@@ -78,7 +78,7 @@ func main() {
     db.Where("district_id = ?", params["id"]).Find(&schoolsInDistrict)
     
     var schoolStats = []SchoolStat{}  
-    db.Where("school_id LIKE ? and teacher_size is not null", params["id"] + "%").Find(&schoolStats)
+    db.Where("school_id LIKE ?", params["id"] + "%").Find(&schoolStats)
     
     schoolAndYearToStats := map[YearAndSchool]SchoolStat{}
     for _, schoolStat := range schoolStats {
