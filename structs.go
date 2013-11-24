@@ -1,12 +1,12 @@
 package main
 
 type School struct {
-  Id    	  int64
+  Id          int64
   Name        string `sql:"size:255"`
   CountyId    int64
   DistrictId  int64
-  //Latitude    float64
-  //Longitude   float64
+  Latitude    float64
+  Longitude   float64
 }
 
 type SchoolsByYear struct {
@@ -52,7 +52,7 @@ type EnrollmentByYear struct { //EnrollmentByYear
 }
 
 type GradeEnrollment struct {
-  Grade           	string
+  Grade             string
   EnrollmentSize    int64
 }
 

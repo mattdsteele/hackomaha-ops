@@ -45,34 +45,51 @@ func main() {
   })
 
   //TODO Possible clean-up opportunities here
-  //TODO Still need total teacher and student count per year - student count could be calculated from grade counts
+  //TODO Still need total teacher count per year
   m.Get("/school/:id", func(res http.ResponseWriter, params martini.Params) string {
-    var testSchool = School{}
-    db.Where("id = ?",params["id"]).First(&testSchool)
-    var testStats = []ClassStat{}
-    db.Where("school_id = ?", params["id"]).Find(&testStats)
+    var school = School{
+      //FIXME hardcoded data
+      Latitude : 41.31027811,
+      Longitude : -96.146874,
+    }
+    db.Where("id = ?",params["id"]).First(&school)
+    var classStats = []ClassStat{}
+    db.Where("school_id = ?", params["id"]).Find(&classStats)
 
     var yearsToEnrollments = map[string][]GradeEnrollment{}
-    for _, row := range testStats {
-      yearsToEnrollments[row.Years] = append(yearsToEnrollments[row.Years], GradeEnrollment{
-        Grade: row.Grade,
-        EnrollmentSize:    row.EnrollmentSize,
-      })
+    for _, row := range classStats {
+      if row.EnrollmentSize > 0 {
+        yearsToEnrollments[row.Years] = append(yearsToEnrollments[row.Years], GradeEnrollment{
+          Grade: row.Grade,
+          EnrollmentSize:    row.EnrollmentSize,
+        })
+      }
     }
 
     var enrollmentData = []EnrollmentByYear{}
     for year, enrollment := range yearsToEnrollments{
+
+      //calculate Students field
+      var classSize int64 = 0
+      for _, i := range enrollment { classSize += i.EnrollmentSize }
+
       enrollmentData = append(enrollmentData, EnrollmentByYear{
         Year: year,
         GradeEnrollment: enrollment,
+        Students: classSize,
+
+        //FIXME hardcoded data
+        Teachers: 50,
       })
     }
 
+    //put it all together
     var allData = SchoolWithEnrollment {
-      School: testSchool,
+      School: school,
       EnrollmentByYear: enrollmentData,
     }
-  return render(res, allData)
+
+    return render(res, allData)
   })
 
   m.Run()
