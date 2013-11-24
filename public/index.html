@@ -22,34 +22,26 @@
 		<nav class="navbar navbar-default" role="navigation">
 		  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<div class="nav navbar-nav">
-							    <button ng-repeat="x in [1,2,3,4,5,6,7,8,9,10]" type="button" class="btn btn-default navbar-btn" data-year="{{x}}">year {{x}} </button>
+					<button ng-repeat="x in yearAry" type="button" class="btn btn-default navbar-btn">{{x}} </button>
 				</div>
-		    <form class="navbar-form navbar-left" role="search">
-		      <div class="form-group">
-		        <input type="text" class="form-control" placeholder="Search">
-		      </div>
-		      <button type="submit" class="btn btn-default">Submit</button>
-		    </form>
-
 		  </div><!-- /.navbar-collapse -->
 		</nav>
 		<div class="row">
-			<div id="ratioData" class="col-xs-6 col-sm-4">
-				chart goes here
-			</div>
+			
 				<div id="ratioData" class="col-xs-6 col-sm-4">
 						<span class="bold">Ratio Data:</span> <br/>
 						Total number of teachers:<br/> <span class='bigNumbers'>{{numberOfTeachers}}123</span><br/>
 						Total number of students:<br/> <span class='bigNumbers steelBlue'>{{numberOfStudents}}123</span>
 					</div>
 					<div id="" class="col-xs-6 col-sm-4">
-						level chart here
-						<svg class="gradelevelChart"></svg>
+						<div id="stackedGradesByYear">
+		
+						</div>						
 					</div>
-					<input type="hidden" name="schoolID" value="3" id="some_name" ng-model="schoolId">
-					<button ng-click="drawEnrollmentChart()">push me to see enrollment by year</button>
+
 				</div>
 	</div>
+
 </div>
 <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="http://www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Fmjtd%7Cluubn90bnl%2Cbn%3Do5-902g1u"></script>
@@ -63,7 +55,6 @@
 <script src="js/nvd3/src/models/scatterChart.js"></script>
 <script src="js/nvd3/src/tooltip.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
-<!-- Latest compiled and minified JavaScript -->
 
 </body>
 </html>

@@ -7,6 +7,7 @@ opsAppModule.factory('OpsApi', function ($http) {
         return $http.get("/schools" , {cache: true})
     };
     api.getSchool = function (schoolId) {
+			console.log('school id is '+ schoolId)
         return $http.get("/school/" + schoolId , {cache: true})
     };
     api.getCounties = function () {
@@ -22,6 +23,7 @@ opsAppModule.factory('OpsApi', function ($http) {
 });
 
 opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
+<<<<<<< HEAD
 	//labels will be school name
 	$scope.historicalBarChart = [];
 	$scope.addBarChart= function(){
@@ -127,5 +129,6 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 		}
 		 	$scope.addBarChart();
      });
+
 
 });

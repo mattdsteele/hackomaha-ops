@@ -56,8 +56,8 @@ var maps = {
 
       switch(type){
         case 'districts':
-          maps.addDistrictCollection(OPS.curData, year);
-          // console.log('districts loading...');
+          maps.addDistrictCollection(OPS.curData, 0);
+//           console.log('districts loading...');
           break;
         case 'schools':
           maps.addSchoolsCollection(OPS.curData, year);
@@ -82,6 +82,8 @@ var maps = {
       var district = d[i];
       var districtSize = district['EnrollmentSize'] * 0.05;
       var districtID = district['District']['Id'];
+
+//      console.log(district['District']['Longitude']);
 
       mapCircle.radiusUnit = 'MI';
       mapCircle.radius = districtSize;
@@ -143,16 +145,9 @@ var maps = {
 
 
 function loadCollection(evt){
-  var district_url = api_url + 'district/' + this.district_id;
-
-  // console.log(this.district_id);
-
-  $.getJSON(district_url, function(json) {
-    OPS.curData = json;
-    OPS.curType = "schools";
-    // console.log(OPS.curData);
-    map.removeAllShapes();
-    maps.addSchoolsCollection(OPS.curData, OPS.curYear);
+  var district_url = "http://15.126.247.23:3000/district/" + this.district_id;
+  $.getJSON(district_url, function(data) {
+//    console.log(data);
   });
 }
 
