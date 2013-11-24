@@ -23,8 +23,9 @@ type District struct {
   Id              int64
   Name            string
   CountyId        int64
-  Latitude        float64
-  Longitude       float64
+  Schools         []School
+  //Latitude        float64
+  //Longitude       float64
 }
 
 type SchoolWithEnrollment struct {

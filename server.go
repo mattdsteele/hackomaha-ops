@@ -24,17 +24,44 @@ func main() {
 
   m.Map(db)
 
+  //Cached data
+  var allSchools = []School{}
+  db.Find(&allSchools)
+
+  allDistricts := []District{}
+  db.Find(&allDistricts)
+
   //These are all the years of active school data. We could also derive it from the DB, possibly
   years := []string{"20022003", "20032004", "20042005", "20052006", "20062007", "20072008", "20082009", "20092010", "20102011", "20112012", "20122013"}
 
   m.Get("/schools", func(res http.ResponseWriter) string {
-    var allSchools = []School{}
-    db.Find(&allSchools)
     return render(res, allSchools)
+  })
+  m.Get("/districts", func(res http.ResponseWriter) string {
+    compiledDistricts := []District{}
+    for _, district := range allDistricts {
+
+      schools := []School{}
+      for _, school := range allSchools {
+        if school.DistrictId == district.Id {
+          schools = append(schools, school)
+        }
+      }
+
+      copiedDistrict := District{
+        Id:  district.Id,
+        Name: district.Name,
+        CountyId: district.CountyId,
+        Schools: schools,
+      }
+      compiledDistricts = append(compiledDistricts, copiedDistrict)
+    }
+
+    return render(res, compiledDistricts)
   })
 
   //TODO need to also return stats by year -- needs to return []DistrictsByYear - district level stats for each year and each district
-  m.Get("/districts", func(res http.ResponseWriter) string {
+  m.Get("/old/districts", func(res http.ResponseWriter) string {
     allDistricts := []District{}
     db.Find(&allDistricts)
 
@@ -46,10 +73,6 @@ func main() {
 
       allDistrictsWithYears := []DistrictYear{}
       for _, district := range allDistricts {
-
-        //FIXME hardcoded
-        district.Latitude = 41.31027811
-        district.Longitude = -96.146874
 
         districtWithYear := DistrictYear {
           EnrollmentSize: 2555,
@@ -114,7 +137,7 @@ func main() {
   })
 
   //This is the original district/:id. We probably can delete it.
-  m.Get("old/district/:id", func(res http.ResponseWriter, params martini.Params) string {
+  m.Get("/old/district/:id", func(res http.ResponseWriter, params martini.Params) string {
 
     schoolsByYear := []SchoolsByYear{}
 
