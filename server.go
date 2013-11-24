@@ -135,7 +135,7 @@ func main() {
     return render(res, district66)
   })
 
-  m.Get("/schools/:id", func(res http.ResponseWriter, params martini.Params) string {
+  m.Get("/school/:id", func(res http.ResponseWriter, params martini.Params) string {
     //school := schoolFind(schools, params["id"])
     return render(res, edisonElementary)
   })
