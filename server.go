@@ -5,7 +5,6 @@ import (
   _ "github.com/go-sql-driver/mysql"
   "github.com/codegangsta/martini"
   "encoding/json"
-  "strconv"
   "net/http"
 )
 
@@ -136,7 +135,6 @@ func main() {
   })
 
   m.Get("/school/:id", func(res http.ResponseWriter, params martini.Params) string {
-    //school := schoolFind(schools, params["id"])
     return render(res, edisonElementary)
   })
 
@@ -153,19 +151,6 @@ func asJson(res http.ResponseWriter, data []byte) string {
   res.Header().Set("Content-Type", "application/json")
   res.Header().Set("Access-Control-Allow-Origin", "*")
   return string(data[:])
-}
-
-func schoolFind(schools []School, id string) School {
-  schoolId, err := strconv.ParseInt(id, 0, 64)
-  if err != nil { panic(err) }
-
-  for _, value := range schools {
-    if value.Id == schoolId {
-      return value
-    }
-  }
-
-  return School{}
 }
 
 type School struct {
@@ -209,11 +194,6 @@ type EnrollmentByYear struct {
 type GradeEnrollment struct {
   Grade         string
   Enrollment    int64
-}
-
-type DistrictsWithSchools struct {
-  District      District
-  Schools       []School
 }
 
 type DistrictsByYear struct {
