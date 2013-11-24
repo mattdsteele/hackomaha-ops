@@ -60,34 +60,6 @@ func main() {
     return render(res, compiledDistricts)
   })
 
-  //TODO need to also return stats by year -- needs to return []DistrictsByYear - district level stats for each year and each district
-  m.Get("/old/districts", func(res http.ResponseWriter) string {
-    allDistricts := []District{}
-    db.Find(&allDistricts)
-
-    districtsByYear := []DistrictsByYear{}
-    for _, year := range years {
-      districtByYear := DistrictsByYear{
-        Year: year,
-      }
-
-      allDistrictsWithYears := []DistrictYear{}
-      for _, district := range allDistricts {
-
-        districtWithYear := DistrictYear {
-          EnrollmentSize: 2555,
-          District: district,
-        }
-        allDistrictsWithYears = append(allDistrictsWithYears, districtWithYear)
-      }
-
-      districtByYear.Districts = allDistrictsWithYears
-      districtsByYear = append(districtsByYear, districtByYear)
-    }
-
-    return render(res, districtsByYear)
-  })
-  
   type YearAndSchool struct {
           SchoolId        int64
           Years                 string
@@ -132,53 +104,6 @@ func main() {
       EnrollmentsByYear: enrollmentsByYear,
     })
   })
-
-  //This is the original district/:id. We probably can delete it.
-  m.Get("/old/district/:id", func(res http.ResponseWriter, params martini.Params) string {
-
-    schoolsByYear := []SchoolsByYear{}
-
-    schoolsInDistrict := []School{}
-    db.Where("district_id = ?", params["id"]).Find(&schoolsInDistrict)
-
-    var schoolStats = []SchoolStat{}  
-    db.Where("school_id LIKE ?", params["id"] + "%").Find(&schoolStats)
-
-    schoolAndYearToStats := map[YearAndSchool]SchoolStat{}
-    for _, schoolStat := range schoolStats {
-      schoolAndYearToStats[YearAndSchool{
-        SchoolId: schoolStat.SchoolId,
-        Years: schoolStat.Years,
-      }] = schoolStat
-    }
-
-    //TODO Use years from db? - if so make sure they're in the right order
-    for _, year := range years {
-
-      schoolsInYear := []SchoolYear{}
-      for _, school := range schoolsInDistrict {
-        var enrollment = schoolAndYearToStats[YearAndSchool{
-          SchoolId: school.Id,
-          Years: year,
-        }].EnrollmentSize
-        if enrollment > 0 {
-          schoolsInYear = append(schoolsInYear, SchoolYear {
-            EnrollmentSize: enrollment,
-            School: school,
-          })
-        }
-      }
-
-      schoolsByYear = append(schoolsByYear, SchoolsByYear{
-        Year: year,
-        Schools: schoolsInYear,
-      })
-    }
-
-    return render(res, schoolsByYear)
-  })
-
-
 
   //TODO Possible clean-up opportunities here, but it's looking pretty decent
   m.Get("/school/:id", func(res http.ResponseWriter, params martini.Params) string {
