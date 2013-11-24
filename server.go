@@ -113,8 +113,6 @@ func main() {
       }
     }
 
-    //FIXME hardcoded teacher value
-    teacherSize := 55
     enrollmentsByYear := []EnrollmentByYear{}
     for _, year := range years {
       enrollment := yearsToEnrollments[year]
@@ -125,7 +123,6 @@ func main() {
         Year: year,
         GradeEnrollment: enrollment,
         Students : classSize,
-        Teachers: int64(teacherSize),
       })
     }
 
