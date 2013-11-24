@@ -26,10 +26,10 @@ func main() {
 
   //Cached data
   var allSchools = []School{}
-  db.Find(&allSchools)
+  db.Order("Name").Find(&allSchools)
 
   allDistricts := []District{}
-  db.Find(&allDistricts)
+  db.Order("Name").Find(&allDistricts)
 
   //These are all the years of active school data. We could also derive it from the DB, possibly
   years := []string{"20022003", "20032004", "20042005", "20052006", "20062007", "20072008", "20082009", "20092010", "20102011", "20112012", "20122013"}
