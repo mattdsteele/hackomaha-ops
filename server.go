@@ -18,6 +18,7 @@ func main() {
 
   m.Map(db)
 
+  //All fake data
   schoolOne := School{
     Id: 1,
     Name: "Millard North High School",
@@ -25,23 +26,14 @@ func main() {
     DistrictId: 1,
     Latitude: -35.22,
     Longitude: 45.12,
-    ClassStats: []ClassStat{
-      ClassStat{
-        SchoolId: 1,
-        Years: "2012-2013",
-        Grade: "6",
-        MaleStudents: "10",
-        FemaleStudents: "15",
-        TotalStudents: "25",
-      },
-    },
   }
   schoolTwo := School{
     Id: 2,
     Name: "Millard South High School",
     CountyId: 1,
     DistrictId: 1,
-    ClassStats: []ClassStat{},
+    Latitude: -35.22,
+    Longitude: 45.12,
   }
   schools := []School{schoolOne, schoolTwo}
 
@@ -77,6 +69,60 @@ func main() {
     },
   }
 
+
+  edisonElementary := SchoolWithEnrollment{
+    School: schoolOne,
+    EnrollmentByYear: []EnrollmentByYear{
+      EnrollmentByYear{
+        Year: "2012-2013",
+        Teachers: 55,
+        Students: 3000,
+        GradeEnrollment: []GradeEnrollment{
+          GradeEnrollment{
+            Grade: "6th",
+            Enrollment: 544,
+          },
+          GradeEnrollment{
+            Grade: "5th",
+            Enrollment: 544,
+          },
+          GradeEnrollment{
+            Grade: "4th",
+            Enrollment: 544,
+          },
+          GradeEnrollment{
+            Grade: "3th",
+            Enrollment: 544,
+          },
+        },
+      },
+      EnrollmentByYear{
+        Year: "2011-2012",
+        Teachers: 55,
+        Students: 3000,
+        GradeEnrollment: []GradeEnrollment{
+          GradeEnrollment{
+            Grade: "6th",
+            Enrollment: 544,
+          },
+          GradeEnrollment{
+            Grade: "5th",
+            Enrollment: 544,
+          },
+          GradeEnrollment{
+            Grade: "4th",
+            Enrollment: 544,
+          },
+          GradeEnrollment{
+            Grade: "3th",
+            Enrollment: 544,
+          },
+        },
+      },
+    },
+  }
+
+  //Routes
   m.Get("/schools", func(res http.ResponseWriter) string {
     return render(res, schools)
   })
@@ -90,12 +136,8 @@ func main() {
   })
 
   m.Get("/schools/:id", func(res http.ResponseWriter, params martini.Params) string {
-    school := schoolFind(schools, params["id"])
-    return render(res, school)
-  })
-
-  m.Get("/schools/:id/:year", func(res http.ResponseWriter, params martini.Params) string {
-    return "WOOOOO"
+    //school := schoolFind(schools, params["id"])
+    return render(res, edisonElementary)
   })
 
   m.Run()
@@ -133,7 +175,6 @@ type School struct {
   DistrictId  int64
   Latitude    float64
   Longitude   float64
-  ClassStats  []ClassStat
 }
 
 type SchoolsByYear struct {
@@ -153,10 +194,26 @@ type District struct {
   Longitude       float64
 }
 
+type SchoolWithEnrollment struct {
+  School            School
+  EnrollmentByYear  []EnrollmentByYear
+}
+
+type EnrollmentByYear struct {
+  Year          string
+  Teachers      int64
+  Students      int64
+  GradeEnrollment []GradeEnrollment
+}
+
+type GradeEnrollment struct {
+  Grade         string
+  Enrollment    int64
+}
 
 type DistrictsWithSchools struct {
-  District        District
-  Schools         []School
+  District      District
+  Schools       []School
 }
 
 type DistrictsByYear struct {
@@ -167,13 +224,4 @@ type DistrictsByYear struct {
 type DistrictYear struct {
   EnrollmentSize  int64
   District        District
-}
-
-type ClassStat struct {
-  SchoolId        int64
-  Years           string
-  Grade           string
-  MaleStudents    string
-  FemaleStudents  string
-  TotalStudents   string
 }
