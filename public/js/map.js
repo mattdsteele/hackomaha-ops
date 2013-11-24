@@ -28,52 +28,58 @@ MQA.EventUtil.observe(window, 'load', function() {
 //  MQA.EventManager.addListener(map, 'dragend', loadData);
 //  MQA.EventManager.addListener(map, 'zoomstart', loadData);
 //  loadDataMQA.EventManager.addListener(map, 'zoomend', loadData);
-
-  MQA.withModule('smallzoom','shapes', function() {
-
+  var schoolsShapeCollection = new MQA.ShapeCollection();
+	var createShapeCollection = function(){
     map.addControl(
       new MQA.SmallZoom(),
       new MQA.MapCornerPlacement(MQA.MapCorner.TOP_LEFT, new MQA.Size(5,5))
     );
 
-    var schools = new MQA.ShapeCollection();
-    schools.collectionName = 'nebraska_schools';
-    schools.maxZoomLevel = 7;
+    var disctricts = new MQA.ShapeCollection();
+    disctricts.collectionName = 'nebraska_disctricts';
+    disctricts.maxZoomLevel = 7;
 
     for(i=0; i < timeline.length; i++){
-      var school = new MQA.CircleOverlay();
+      var disctrictCircle = new MQA.CircleOverlay();
 
       var district = timeline[i]['Districts'][0];
       var districtSize = timeline[i]['Districts'][0]['EnrollmentSize'] * 0.05;
       var districtID = timeline[i]['Districts'][0]['District']['Id'];
       var latLong = timeline[i]['Districts'][0]['District']['Latitude'] + ', ' + timeline[i]['Districts'][0]['District']['Longitude'];
 
-      school.radiusUnit = 'MI';
-      school.radius = districtSize;
-      school.shapePoints = [timeline[i]['Districts'][0]['District']['Latitude'], timeline[i]['Districts'][0]['District']['Longitude']];
-      school.colorAlpha = 0.5;
-      school.borderWidth = 0;
-      school.fillColor = '#05c0e2';
-      school.fillColorAlpha = 0.4;
-      school.district_id = districtID;
+      disctrictCircle.radiusUnit = 'MI';
+      disctrictCircle.radius = districtSize;
+      disctrictCircle.shapePoints = [timeline[i]['Districts'][0]['District']['Latitude'], timeline[i]['Districts'][0]['District']['Longitude']];
+      disctrictCircle.colorAlpha = 0.5;
+      disctrictCircle.borderWidth = 0;
+      disctrictCircle.fillColor = '#05c0e2';
+      disctrictCircle.fillColorAlpha = 0.4;
+      disctrictCircle.district_id = districtID;
 
-      MQA.EventManager.addListener(school, 'dblclick', getDistrict);
+      MQA.EventManager.addListener(disctrictCircle, 'dblclick', getDistrict);
 
-      schools.add(school);
+      disctricts.add(disctrictCircle);
     }
 
-    map.addShapeCollection(schools);
+    map.addShapeCollection(disctricts);
 
 
 
     map.bestFit();
-
-    function getDistrict(evt){
-      var district_url = "http://15.126.247.23:3000/district/" + this.district_id;
-      $.getJSON(district_url, function(data) {
-        console.log(data);
-      });
-    }
-
+	}	
+  MQA.withModule('smallzoom','shapes', function() {
+		createShapeCollection();
   });
+	/**
+	when double clicked, this should get all the schools for district to be inserted in the shape Collection and 
+	**/
+	
+  function getDistrict(evt){
+    var district_url = "http://15.126.247.23:3000/district/" + this.district_id;
+    $.getJSON(district_url, function(data) {
+      console.log(data);
+			//schoolsShapeCollection
+			//$scope.addEnrollmentChart
+    });
+  }
 });

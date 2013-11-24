@@ -81,3 +81,14 @@ div {
   max-width: 100%;
   height:320px;
 }
+.bigNumbers{
+font-size: 70px;
+
+ font-weight:bold;
+}
+.steelBlue{
+color:steelblue;
+}
+.bold{
+ font-weight:bold;
+}

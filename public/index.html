@@ -2,33 +2,55 @@
 <html ng-app="opsApp">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>index</title>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/ngApp.js" type="text/javascript" charset="utf-8">
-	</script>
-<link href="js/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	<script src="js/ngApp.js" type="text/javascript" charset="utf-8">	</script>
+<!-- 	this should be uncommented, leaving out due to conflicts with map quest
+	<link href="js/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">  -->
+	<link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
 
 </head>
-<body  onload="" ng-controller="OpsCtrl">
-
+<body  class="" ng-controller="OpsCtrl">
+<div class="container">
   <div class="map-wrap">
     <div id="map"></div>
   </div>
+	<div id="schoolTableInfo" >
+		<nav class="navbar navbar-default" role="navigation">
+		  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<div class="nav navbar-nav">
+							    <button ng-repeat="x in [1,2,3,4,5,6,7,8,9,10]" type="button" class="btn btn-default navbar-btn">year {{x}} </button>
+				</div>
+		    <form class="navbar-form navbar-left" role="search">
+		      <div class="form-group">
+		        <input type="text" class="form-control" placeholder="Search">
+		      </div>
+		      <button type="submit" class="btn btn-default">Submit</button>
+		    </form>
 
-	<div id="barchart">
-	    <svg></svg>
-	  </div>
-
-
-		<div id="">
-			<svg class="gradelevelChart"></svg>
-		</div>
-		<input type="hidden" name="schoolID" value="2" id="some_name" ng-model="schoolId">
-		<button ng-click="drawEnrollmentChart()">push me to see enrollment by year</button>
-
-
+		  </div><!-- /.navbar-collapse -->
+		</nav>
+		<div class="row">
+			<div id="ratioData" class="col-xs-6 col-sm-4">
+				chart goes here
+			</div>
+				<div id="ratioData" class="col-xs-6 col-sm-4">
+						<span class="bold">Ratio Data:</span> <br/>
+						Total number of teachers:<br/> <span class='bigNumbers'>{{numberOfTeachers}}123</span><br/>
+						Total number of students:<br/> <span class='bigNumbers steelBlue'>{{numberOfStudents}}123</span>
+					</div>
+					<div id="" class="col-xs-6 col-sm-4">
+						level chart here
+						<svg class="gradelevelChart"></svg>
+					</div>
+					<input type="hidden" name="schoolID" value="3" id="some_name" ng-model="schoolId">
+					<button ng-click="drawEnrollmentChart()">push me to see enrollment by year</button>
+				</div>
+	</div>
+</div>
 <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="http://www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Fmjtd%7Cluubn90bnl%2Cbn%3Do5-902g1u"></script>
 <script src="js/map.js"></script>
@@ -40,6 +62,8 @@
 <script src="js/nvd3/src/models/scatter.js"></script>
 <script src="js/nvd3/src/models/scatterChart.js"></script>
 <script src="js/nvd3/src/tooltip.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
 
 </body>
 </html>
