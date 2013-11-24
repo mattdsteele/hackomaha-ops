@@ -31,9 +31,11 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
     OpsApi.getSchool($scope.schoolInView).success(function (data){
       console.log(data);
       $scope.cardName = data.School.Name;
+      var schoolId = data.School.Id;
       var enrollmentLevel = data.EnrollmentByYear[0];
       $scope.totalEnrollment = enrollmentLevel.Students;
       $scope.totalTeachers = enrollmentLevel.Teachers;
+      $scope.drawStackedBar(schoolId);
     });
     $scope.schoolId = 2;
 
@@ -107,7 +109,8 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 	 			     .orient("left")
 	 			     .tickFormat(d3.format(".2s"));
 
-	 			 var svg = d3.select("#stackedGradesByYear").append("svg")
+	 			 d3.select("#stackedGradesByYear svg").remove();
+	 			 var svg = d3.select("#stackedGradesByYear").insert("svg")
 	 			     .attr("width", width + margin.left + margin.right)
 	 			     .attr("height", height + margin.top + margin.bottom)
 	 			   .append("g")
