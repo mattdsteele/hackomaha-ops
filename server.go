@@ -23,6 +23,9 @@ func main() {
 
   m.Map(db)
 
+  //These are all the years of active school data. We could also derive it from the DB, possibly
+  years := []string{"20022003", "20032004", "20042005", "20052006", "20062007", "20072008", "20082009", "20092010", "20102011", "20112012", "20122013"}
+
   m.Get("/schools", func(res http.ResponseWriter) string {
     var allSchools = []School{}
     db.Find(&allSchools)
@@ -34,7 +37,6 @@ func main() {
     allDistricts := []District{}
     db.Find(&allDistricts)
 
-    years := []string{"20022003", "20032004", "20042005", "20052006", "20062007", "20072008", "20082009", "20092010", "20102011", "20112012", "20122013"}
     districtsByYear := []DistrictsByYear{}
     for _, year := range years {
       districtByYear := DistrictsByYear{
@@ -62,11 +64,34 @@ func main() {
     return render(res, districtsByYear)
   })
 
-  //TODO need to also return stats by year for each school in the district - needs to return SchoolsByYear[] - data for all schools in this district
+  //TODO need to also return stats by year for each school in the district
   m.Get("/district/:id", func(res http.ResponseWriter, params martini.Params) string {
+    schoolsByYear := []SchoolsByYear{}
+
+    schoolsInDistrict := []School{}
+    db.Where("district_id = ?", params["id"]).Find(&schoolsInDistrict)
+
+    for _, year := range years {
+
+      //calculate school enrollment & append it
+      schoolsInYear := []SchoolYear{}
+      for _, school := range schoolsInDistrict {
+        schoolsInYear = append(schoolsInYear, SchoolYear {
+          //FIXME hardcoded
+          EnrollmentSize: 552,
+          School: school,
+        })
+      }
+
+      schoolsByYear = append(schoolsByYear, SchoolsByYear{
+        Year: year,
+        Schools: schoolsInYear,
+      })
+    }
+
     var testDistrict = District{}
     db.Where("id = ?", params["id"]).First(&testDistrict)
-    return render(res, testDistrict)
+    return render(res, schoolsByYear)
 
   })
 
