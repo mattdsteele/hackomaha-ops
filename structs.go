@@ -5,8 +5,8 @@ type School struct {
   Name        string `sql:"size:255"`
   CountyId    int64
   DistrictId  int64
-  Latitude    float64
-  Longitude   float64
+  Lat    	  float64
+  Lon   	  float64
 }
 
 type SchoolsByYear struct {
@@ -24,8 +24,8 @@ type District struct {
   Name            string
   CountyId        int64
   Schools         []School
-  //Latitude        float64
-  //Longitude       float64
+  Lat        	  float64
+  Lon       	  float64
 }
 
 type SchoolWithEnrollment struct {
@@ -58,10 +58,10 @@ type DistrictClassStats struct {
 
 //School_Stats table - already exists with this plus more
 type SchoolStat struct {
-	SchoolId		int64
-	Years			string
-	EnrollmentSize	int64
-	TeacherSize		string
+        SchoolId                int64
+        Years                        string
+        EnrollmentSize        int64
+        TeacherSize                string
 }
 
 type DistrictWithYears struct {
