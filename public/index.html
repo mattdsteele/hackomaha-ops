@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>index</title>
+	<title>Douglas &amp; Sarpy County School Enrollment Visualization</title>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/ngApp.js" type="text/javascript" charset="utf-8">	</script>
@@ -18,12 +18,19 @@
 <body  class="" ng-controller="OpsCtrl">
 
 <div class="container">
-	<h1>OOPS</h1>
+    <div class="row">
+        <div class="col-md-12">
+	       <h1>Douglas &amp; Sarpy Country <small>School Enrollment</small></h1>
+           <p style="line-height:25px;">This tool provides enrollment data <strong>by grade</strong> for <strong>all 135,047 public and private school students in Douglas and Sarpy counties in Nebraska</strong> between the 2002-2003 and 2012-2013 school years. This project was created during <a href="http://www.eventbrite.com/e/hack-omaha-iii-with-a-vengeance-tickets-8715076027">Hack Omaha 2013</a> by Jerod Santo, Matt Steele, Jessica Codr, Chris Kollars, Juan Vazquez, Mike Kolakowski, Leah Becerra, and Alex P. Gates. In future releases, we hope to incorporate census data and other open data to make predictions for future school years.</p>
+           <p style="line-height:25px;">Our goal is to provide a simple way to visualize growth within grade levels for each school from year to year. We hope school administrators will use this data to forecast grade enrollment and reasonably allocate teachers and other resources.</p>
+        </div>
+    </div>
+    <hr>
 <div class="row">
 	<div class="col-md-4">
 		<label >District</label>
     <select class="form-control" ng-model="currentDistrict" ng-change="districtChanged()">
-	    <option value="">-- choose District --</option>
+	    <option value="">Select District</option>
 			<option ng-repeat="district in districtList" value="{{district.Id}}" >
 			        {{district.Name}}
 			    </option>
@@ -32,7 +39,7 @@
 	<div class="col-md-4">
 	<label >School</label>
 	<select class="form-control col-md-4" ng-model="schoolInView" ng-change="updateSchoolCharts()" >
-    <option value="">-- choose School --</option>
+    <option value="">Select School</option>
 		<option ng-repeat="school in schoolsForDistrict" value="{{school.Id}}" >
 		        {{school.Name}}
 		    </option>
