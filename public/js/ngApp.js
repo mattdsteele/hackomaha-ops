@@ -43,6 +43,12 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
     })[0];
     $scope.schoolsForDistrict = districtsInSchool.Schools;
     $scope.drawStackedBar($scope.currentDistrict, "district");
+    OpsApi.getDistrict($scope.currentDistrict).success(function(data) {
+      $scope.cardName = data.District.Name;
+      var enrollmentLevel = data.EnrollmentsByYear[data.EnrollmentsByYear.length - 1];
+      $scope.totalEnrollment = enrollmentLevel.Students;
+      $scope.totalTeachers = enrollmentLevel.Teachers;
+    });
   };
 
   $scope.updateSchoolCharts = function(){
