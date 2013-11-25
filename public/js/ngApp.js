@@ -84,7 +84,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 	 	 			var aryItem = {"Year":yearsData[i]['Year']}
 	 	 			var gradeEnrollmentAry = yearsData[i]["GradeEnrollment"]
 	 	 			for(var j=0 ; j< gradeEnrollmentAry.length; j++){
-	 	 				aryItem["Grade " +	gradeEnrollmentAry[j]['Grade']] = gradeEnrollmentAry[j]['EnrollmentSize'];
+	 	 				aryItem["" +	gradeEnrollmentAry[j]['Grade']] = gradeEnrollmentAry[j]['EnrollmentSize'];
 	 	 			}
 	 	 			mungedData.push(aryItem);
 	 	 		}
@@ -98,7 +98,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 	 	 			var gradeEnrollmentAry = yearsData[i]["GradeEnrollment"]
           if (gradeEnrollmentAry) {
             for(var j=0 ; j< gradeEnrollmentAry.length; j++){
-              aryItem["Grade " +	gradeEnrollmentAry[j]['Grade']] = gradeEnrollmentAry[j]['EnrollmentSize'];
+              aryItem["" +	gradeEnrollmentAry[j]['Grade']] = gradeEnrollmentAry[j]['EnrollmentSize'];
             }
             mungedData.push(aryItem);
           }
@@ -182,7 +182,7 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
 	 		       .data(color.domain().slice().reverse())
 	 		     .enter().append("g")
 	 		       .attr("class", "legend")
-	 		       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+	 		       .attr("transform", function(d, i) { return "translate(40," + i * 20 + ")"; });
 
 	 		   legend.append("rect")
 	 		       .attr("x", width - 18)
