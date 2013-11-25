@@ -112,7 +112,9 @@ func main() {
     db.Where("id = ?", schoolId).First(&school)
     
     var classStats = []ClassStat{}
-    db.Where("school_id = ?", params["id"]).Find(&classStats)
+    db.Where("school_id = ? and grade = 'PK'", params["id"]).Find(&classStats)
+    db.Where("school_id = ? and grade = 'K'", params["id"]).Find(&classStats)
+    db.Where("school_id = ? and grade <> 'K' and grade <> 'PK'", params["id"]).Find(&classStats)
     
     var yearsToEnrollments = map[string][]GradeEnrollment{}
     for _, row := range classStats {
