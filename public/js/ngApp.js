@@ -7,7 +7,6 @@ opsAppModule.factory('OpsApi', function ($http) {
         return $http.get("/schools" , {cache: true})
     };
     api.getSchool = function (schoolId) {
-			console.log('school id is '+ schoolId)
         return $http.get("/school/" + schoolId , {cache: true})
     };
     api.getCounties = function () {
@@ -52,7 +51,11 @@ opsAppModule.controller('OpsCtrl', function ($scope, OpsApi) {
   };
 
   $scope.updateSchoolCharts = function(){
-    $scope.updateCards();
+    if ($scope.schoolInView) {
+      $scope.updateCards();
+    } else {
+      $scope.districtChanged();
+    }
   }
 
 	 	$scope.yearAry=['2002/2003','2003/2004','2004/2005','2005/2006','2006/2007','2007/2008','2008/2009','2009/2010',
