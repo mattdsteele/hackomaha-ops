@@ -14,7 +14,7 @@ func main() {
   m := martini.Classic()
 
   dbPassword := os.Getenv("OOPS_DB_PASS")
-  db, err := gorm.Open("mysql", "oops:" + dbPassword + "@tcp(15.126.247.23:3306)/oops")
+  db, err := gorm.Open("mysql", "oops:" + dbPassword + "@tcp(0.0.0.0:3306)/oops")
   if err != nil { panic(err) }
   //defer db.Close() //TODO what should this be?
 
