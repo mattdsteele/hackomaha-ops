@@ -4,19 +4,19 @@ opsAppModule.factory('OpsApi', function ($http) {
     var api = {};
 		//munge the data to show school name and value
     api.getSchools = function () {
-        return $http.get("/schools" , {cache: true})
+        return $http.get("/api/schools.json" , {cache: true})
     };
     api.getSchool = function (schoolId) {
-        return $http.get("/school/" + schoolId , {cache: true})
+        return $http.get("/api/school/" + schoolId + '.json' , {cache: true})
     };
     api.getCounties = function () {
-        return $http.get("/schools" )
+        return $http.get("/api/schools.json" )
     };
     api.getDistricts = function () {
-        return $http.get("/districts")
+        return $http.get("/api/districts.json")
     };
     api.getDistrict = function (districtID) {
-        return $http.get("/district/" + districtID )
+        return $http.get("/api/district/" + districtID + '.json')
     };
     return api;
 });
